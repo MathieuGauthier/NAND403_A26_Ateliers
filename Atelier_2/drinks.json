@@ -1,0 +1,17 @@
+[
+    {
+        "name" : "Whiskey",
+        "price" : "10.00",
+        "type" : "alcohol"
+    },
+    {
+        "name" : "Vodka",
+        "price" : "9.00",
+        "type" : "alcohol"
+    },
+    {
+        "name" : "Water",
+        "price" : "100.00",
+        "type" : "alcohol-free"
+    }
+]
