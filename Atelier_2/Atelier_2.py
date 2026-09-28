@@ -1,7 +1,7 @@
 # 01 : Ouvrir un fichier json dans python | JSON file_path and fonction load
 import sys
 import json
-from Pyside6.QtWidgets import 
+from PySide6.QtWidgets import QWidget, QApplication, QMainWindow
 
 json_file = sys.argv[1]
 print("Path >>>>>>>>> " + json_file + " <<<<<<<<<<<")
@@ -20,7 +20,7 @@ for i in data:
         print(k)
 
 
-QApplication([])
-QMainWindow()
+app = QApplication([])
+window = QMainWindow()
 window.show();
 sys.exit(app.exec())
