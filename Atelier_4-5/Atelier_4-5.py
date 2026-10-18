@@ -31,7 +31,8 @@ class RandomGenerator(QWidget):
         
 
         # Convenience function to set the minimum, and maximum values with a single function call.
-        self.spinbox = self.position()
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(1, 10000)
         self.number_objects.addWidget(self.spinbox)
 
 
@@ -54,12 +55,12 @@ class RandomGenerator(QWidget):
         self.grid.addWidget(QLabel("Position Z"), 3, 0)
 
         # (X,Y,Z) values = spinbox position fonction.
-        self.min_pos_x = self.position()
-        self.max_pos_x = self.position()
-        self.min_pos_y = self.position()
-        self.max_pos_y = self.position()
-        self.min_pos_z = self.position()
-        self.max_pos_z = self.position()
+        self.min_pos_x = self.position(-10)
+        self.max_pos_x = self.position(10)
+        self.min_pos_y = self.position(-10)
+        self.max_pos_y = self.position(10)
+        self.min_pos_z = self.position(-10)
+        self.max_pos_z = self.position(10)
 
         # Positionning de (X,Y,Z) spinbox in the grid
         self.grid.addWidget(self.min_pos_x, 1, 1)
@@ -73,8 +74,8 @@ class RandomGenerator(QWidget):
         self.grid.addWidget(QLabel("Scale"), 4, 0)
 
         # Scale value = DoubleSpinBox fonction
-        self.min_scale = self.scale()
-        self.max_scale = self.scale()
+        self.min_scale = self.scale(0.5)
+        self.max_scale = self.scale(2.0)
 
         # Positionning scale doubleSpinbox in the grid
         self.grid.addWidget(self.min_scale, 4, 1)
@@ -89,27 +90,28 @@ class RandomGenerator(QWidget):
 #---------------- Button create ---------------------------------------
 
         self.create_button = QPushButton("Create")
-        self.create_button.clicked.connect(self.create_object)
+        self.create_button.clicked.connect(self.create_objects)
         self.layout_interface.addWidget(self.create_button)
 
   
 #------------------------------- FONCTIONS -------------------------------
-    def scale(self):
+    def scale(self, value = 0.0):
         scale = QDoubleSpinBox()
-        scale.setRange(-10000, 10000)
+        scale.setRange(0.01, 10000)
+        scale.setValue(value)
         scale.setDecimals(2)
         return scale
 
-    def position(self):
+    def position(self, value = 0):
         position = QSpinBox()
-        position.setRange(0,10000)
+        position.setRange(-10000, 10000)
+        position.setValue(value)
         return position
    
    
-    def create_object(self):
+    def random_object(self):
         forme = random.choice(["cube", "cylindre", "sphere"])
 
-        
 
         if forme == "cube":
             objet = cmds.polyCube()[0]
@@ -117,11 +119,10 @@ class RandomGenerator(QWidget):
             objet = cmds.polyCylinder()[0]  
         else:
             objet = cmds.polySphere()[0]
-        random_value = random.uniform(-10, 10)
 
 
         # Position est une valeur aleatoire pour chaque axe
-        x = random.uniform(self.min_pos_x.value(), self.max_pos_xvalue())
+        x = random.uniform(self.min_pos_x.value(), self.max_pos_x.value())
         y = random.uniform(self.min_pos_y.value(), self.max_pos_y.value())
         z = random.uniform(self.min_pos_z.value(), self.max_pos_z.value())
         cmds.move(x, y, z, objet)
@@ -130,8 +131,15 @@ class RandomGenerator(QWidget):
         scale = random.uniform(self.min_scale.value(), self.max_scale.value())
         cmds.scale(scale,scale,scale,objet)
 
+       
 
-
+    def create_objects(self):
+        cmds.undoInfo(openChunk=True)
+        try:
+            for _ in range(self.spinbox.value()):
+                self.random_object()
+        finally:
+            cmds.undoInfo(closeChunk=True)
 
 
 def main():
