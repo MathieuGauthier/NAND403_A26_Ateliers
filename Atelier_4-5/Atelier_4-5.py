@@ -31,6 +31,8 @@ class RandomGenerator(QWidget):
         
 
         # Convenience function to set the minimum, and maximum values with a single function call.
+        # QSpinBox use only INT values for the number of onject created. 
+        # Every time the value changes QSpinBox emits valueChanged() and textChanged() signals, the former providing a int and the latter a QString. 
         self.spinbox = QSpinBox()
         self.spinbox.setRange(1, 10000)
         self.number_objects.addWidget(self.spinbox)
@@ -136,7 +138,7 @@ class RandomGenerator(QWidget):
     def create_objects(self):
         cmds.undoInfo(openChunk=True)
         try:
-            for _ in range(self.spinbox.value()):
+            for int in range(self.spinbox.value()):
                 self.random_object()
         finally:
             cmds.undoInfo(closeChunk=True)
