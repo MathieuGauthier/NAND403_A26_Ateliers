@@ -191,7 +191,7 @@ class FenceGenerator(QWidget):
                 for j in range(nb_poteau_h):
                     ratio = (j + 1) / (nb_poteau_h + 1) # le ratio evite a un poteau d'etre au limite du poteau vertical
 
-                    poteau_h = cmds.polyCube(w=distance, h=valeur_h_y, d=valeur_h_x, name=f"poteau_h_{i + 1}_{j + 1}")[0]
+                    poteau_h = cmds.polyCube(w=distance, h=valeur_h_y, d=valeur_h_x, name=f"poteau_h_{j + 1}")[0]
                     cmds.move(centre_x, valeur_v_y * ratio, 0, poteau_h)
 
 
